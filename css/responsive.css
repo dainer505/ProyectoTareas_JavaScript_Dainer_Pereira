@@ -1,0 +1,21 @@
+/* Adaptación responsiva para móviles y tablets */
+@media (max-width: 720px) {
+    .barra-superior,
+    .barra-inferior {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .botones-principales,
+    .acciones-masivas,
+    .grupo-filtros {
+        width: 100%;
+        justify-content: stretch;
+    }
+
+    .botones-principales .btn,
+    .acciones-masivas .btn {
+        flex: 1;
+        text-align: center;
+    }
+}
