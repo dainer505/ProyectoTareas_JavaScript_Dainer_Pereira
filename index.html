@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestor de Tareas</title>
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+    <header class="encabezado-principal">
+        <div class="contenedor-header">
+            <h1>Mis Tareas</h1>
+            <p>Organizador de actividades diarias con persistencia local</p>
+        </div>
+    </header>
+
+    <main class="contenedor-principal">
+        <section class="panel-controles">
+            <div class="barra-superior">
+                <input
+                    type="search"
+                    id="input-buscar"
+                    class="input-buscador"
+                    placeholder="Buscar tarea por título..."
+                >
+                <div class="botones-principales">
+                    <button id="btn-nueva-tarea" class="btn btn-primario">+ Crear tarea</button>
+                    <button id="btn-abrir-importar" class="btn btn-secundario">Importar tareas (API)</button>
+                </div>
+            </div>
+
+            <div class="barra-inferior">
+                <div class="grupo-filtros">
+                    <button class="btn-filtro activo" data-filtro="todas">Todas</button>
+                    <button class="btn-filtro" data-filtro="pendientes">Pendientes</button>
+                    <button class="btn-filtro" data-filtro="completadas">Completadas</button>
+                </div>
+                <div class="acciones-masivas">
+                    <button id="btn-marcar-todas" class="btn btn-exito">Marcar todas terminadas</button>
+                    <button id="btn-vaciar-lista" class="btn btn-peligro">Vaciar lista</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="seccion-listado">
+            <div id="contador-tareas" class="contador-tareas">Mostrando 0 tareas</div>
+            <div id="contenedor-tareas" class="lista-tareas"></div>
+        </section>
+    </main>
+
+    <!-- Componentes de ventanas modales con Shadow DOM -->
+    <modal-formulario id="componente-modal-tarea"></modal-formulario>
+    <modal-importar id="componente-modal-importar"></modal-importar>
+
+    <!-- Enlace al módulo principal de JavaScript -->
+    <script type="module" src="./js/app.js"></script>
+</body>
+</html>
