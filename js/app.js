@@ -9,11 +9,9 @@ import {
 import "./componentes/tarjeta-tarea.js";
 import "./componentes/modal-formulario.js";
 
-// --- Importaciones de SEBASTIÁN ---
 import { obtenerTareasDesdeAPI } from "./datos/conexion-api.js";
 import "./componentes/modal-importar.js";
 
-// --- Referencias del DOM ---
 const contenedorTareas = document.getElementById("contenedorTareas");
 const contadorTotal = document.getElementById("contadorTotal");
 const contadorPendientes = document.getElementById("contadorPendientes");
@@ -29,7 +27,6 @@ const btnAbrirImportar = document.getElementById("btnAbrirImportar");
 const modalFormulario = document.getElementById("modalFormulario");
 const modalImportar = document.getElementById("modalImportar");
 
-// --- Bloque de DAINER: Estadísticas y Renderizado de Tarjetas ---
 function actualizarEstadisticas(tareas) {
     const total = tareas.length;
     const completadas = tareas.filter(t => t.completada).length;
@@ -78,7 +75,6 @@ function renderizarInterfaz() {
     });
 }
 
-// --- Bloque de DAINER: Eventos CRUD Locales ---
 btnNuevaTarea.addEventListener("click", () => {
     modalFormulario.abrirParaCrear();
 });
@@ -107,7 +103,6 @@ document.addEventListener("eliminar-tarea", (e) => {
     renderizarInterfaz();
 });
 
-// --- Bloque de SEBASTIÁN: Eventos de Importación API y Filtros ---
 btnAbrirImportar.addEventListener("click", () => {
     modalImportar.abrir();
 });
@@ -132,5 +127,4 @@ inputBuscar.addEventListener("input", renderizarInterfaz);
 selectFiltroEstado.addEventListener("change", renderizarInterfaz);
 selectFiltroOrigen.addEventListener("change", renderizarInterfaz);
 
-// Carga inicial al abrir la app
 document.addEventListener("DOMContentLoaded", renderizarInterfaz);
