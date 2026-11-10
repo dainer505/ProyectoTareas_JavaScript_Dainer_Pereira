@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="css/responsive.css">
 </head>
 <body>
-
+    
     <header class="top-navbar">
         <div class="navbar-container">
             <div class="brand">
@@ -43,13 +43,16 @@
             </div>
         </section>
 
+        <!-- Grilla donde se insertan las tarjetas (<tarjeta-tarea>) -->
         <section id="contenedorTareas" class="tasks-grid"></section>
+
         <section class="bottom-bar">
             <button type="button" id="btnMarcarTodas" class="btn btn-outline">Marcar como terminadas</button>
             <button type="button" id="btnVaciarLista" class="btn btn-danger-soft">Vaciar lista</button>
         </section>
     </main>
 
+    <!-- Componentes Web (Ventanas Modales con Shadow DOM) -->
     <modal-formulario id="modalFormulario"></modal-formulario>
     <modal-importar id="modalImportar"></modal-importar>
 
