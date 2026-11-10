@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Manager</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/forms.css">
+    <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+    <header class="top-navbar">
+        <div class="navbar-container">
+            <div class="brand">
+                <span class="brand-icon">☑️</span>
+                <h1>Task Manager</h1>
+            </div>
+            <div class="user-menu">
+                <span>👤 Usuario ▾</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-container">
+        <!-- Barra superior de controles (Buscador + Filtros + Botones) -->
+        <section class="controls-card">
+            <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="inputBuscar" placeholder="Buscar tareas...">
+            </div>
+
+            <div class="filter-group" id="grupoFiltros">
+                <button type="button" class="filter-btn active" data-filtro="todos">Todos</button>
+                <button type="button" class="filter-btn" data-filtro="pendientes">Pendientes</button>
+                <button type="button" class="filter-btn" data-filtro="completados">Completados</button>
+            </div>
+
+            <div class="action-buttons">
+                <button type="button" id="btnNuevaTarea" class="btn btn-dark">Nueva Tarea</button>
+                <button type="button" id="btnAbrirImportar" class="btn btn-outline">Importar Tareas de la API</button>
+            </div>
+        </section>
+
+        <section id="contenedorTareas" class="tasks-grid"></section>
+        <section class="bottom-bar">
+            <button type="button" id="btnMarcarTodas" class="btn btn-outline">Marcar como terminadas</button>
+            <button type="button" id="btnVaciarLista" class="btn btn-danger-soft">Vaciar lista</button>
+        </section>
+    </main>
+
+    <modal-formulario id="modalFormulario"></modal-formulario>
+    <modal-importar id="modalImportar"></modal-importar>
+
+    <script type="module" src="js/app.js"></script>
+</body>
+</html>

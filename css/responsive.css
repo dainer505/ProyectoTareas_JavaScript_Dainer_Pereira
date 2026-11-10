@@ -1,21 +1,41 @@
-/* Adaptación responsiva para móviles y tablets */
-@media (max-width: 720px) {
-    .barra-superior,
-    .barra-inferior {
+@media (max-width: 992px) {
+    .tasks-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .controls-card {
+        flex-wrap: wrap;
+    }
+
+    .search-box {
+        max-width: 100%;
+        width: 100%;
+    }
+}
+
+@media (max-width: 640px) {
+    .tasks-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .controls-card {
         flex-direction: column;
         align-items: stretch;
     }
 
-    .botones-principales,
-    .acciones-masivas,
-    .grupo-filtros {
+    .filter-group {
         width: 100%;
-        justify-content: stretch;
     }
 
-    .botones-principales .btn,
-    .acciones-masivas .btn {
+    .filter-btn {
         flex: 1;
-        text-align: center;
+    }
+
+    .action-buttons {
+        flex-direction: column;
+    }
+
+    .bottom-bar {
+        flex-direction: column;
     }
 }
