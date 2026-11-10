@@ -2,7 +2,7 @@ export class ModalFormulario extends HTMLElement {
     constructor() {
         super();
         this.attachShadow({ mode: "open" });
-        this._tareaEdicion = null;
+        this.tareaEnEdicion = null;
     }
 
     connectedCallback() {
@@ -10,34 +10,39 @@ export class ModalFormulario extends HTMLElement {
     }
 
     abrirParaCrear() {
-        this._tareaEdicion = null;
+        this.tareaEnEdicion = null;
         this.render();
-        this.shadowRoot.querySelector(".overlay").classList.add("activo");
+        this.shadowRoot.getElementById("overlayFormulario").classList.add("activo");
     }
 
     abrirParaEditar(tarea) {
-        this._tareaEdicion = tarea;
+        this.tareaEnEdicion = tarea;
         this.render();
-        this.shadowRoot.querySelector(".overlay").classList.add("activo");
+        this.shadowRoot.getElementById("overlayFormulario").classList.add("activo");
     }
 
     cerrar() {
-        const overlay = this.shadowRoot.querySelector(".overlay");
+        const overlay = this.shadowRoot.getElementById("overlayFormulario");
         if (overlay) overlay.classList.remove("activo");
     }
 
     render() {
-        const editando = Boolean(this._tareaEdicion);
-        const tituloActual = editando ? this._tareaEdicion.titulo : "";
-        const descActual = editando ? this._tareaEdicion.descripcion : "";
-        const prioActual = editando ? this._tareaEdicion.prioridad : "media";
+        const editando = this.tareaEnEdicion !== null;
+        const fechaPorDefecto = new Date().toISOString().split("T")[0];
+
+        const valorTitulo = editando ? this.tareaEnEdicion.titulo : "";
+        const valorFecha = editando ? this.tareaEnEdicion.fecha : fechaPorDefecto;
+        const valorCompletada = editando ? this.tareaEnEdicion.completada : false;
 
         this.shadowRoot.innerHTML = `
             <style>
                 .overlay {
                     position: fixed;
-                    inset: 0;
-                    background: rgba(15, 23, 42, 0.75);
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background-color: rgba(30, 41, 59, 0.75);
                     display: none;
                     justify-content: center;
                     align-items: center;
@@ -48,113 +53,142 @@ export class ModalFormulario extends HTMLElement {
                     display: flex;
                 }
                 .modal {
-                    background: #1e293b;
-                    border: 1px solid #334155;
+                    background-color: #ffffff;
                     border-radius: 12px;
                     width: 100%;
-                    max-width: 460px;
-                    padding: 24px;
-                    color: #f8fafc;
-                    box-shadow: 0 15px 30px rgba(0,0,0,0.5);
+                    max-width: 420px;
+                    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25);
+                    overflow: hidden;
+                    color: #1e293b;
                 }
-                h2 {
-                    margin: 0 0 16px;
-                    font-size: 1.3rem;
+                .modal-header {
+                    padding: 20px 24px 14px;
+                    border-bottom: 1px solid #f1f5f9;
+                }
+                .modal-header h2 {
+                    margin: 0;
+                    font-size: 1.25rem;
+                    color: #0f172a;
+                }
+                .modal-body {
+                    padding: 20px 24px;
                 }
                 .campo {
-                    margin-bottom: 14px;
+                    margin-bottom: 16px;
                     display: flex;
                     flex-direction: column;
                     gap: 6px;
                 }
                 label {
                     font-size: 0.85rem;
-                    color: #94a3b8;
+                    font-weight: 600;
+                    color: #475569;
                 }
-                input, textarea, select {
+                input[type="text"],
+                input[type="date"] {
                     padding: 10px 12px;
+                    border: 1px solid #cbd5e1;
                     border-radius: 8px;
-                    border: 1px solid #334155;
-                    background: #0f172a;
-                    color: #f8fafc;
-                    font-family: inherit;
-                    font-size: 0.95rem;
+                    background-color: #f8fafc;
+                    font-size: 0.92rem;
+                    color: #1e293b;
+                    outline: none;
                 }
-                textarea {
-                    resize: vertical;
-                    min-height: 80px;
+                .check-row {
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+                    margin-top: 8px;
                 }
-                .acciones {
+                .check-row input {
+                    width: 18px;
+                    height: 18px;
+                    cursor: pointer;
+                }
+                .check-row label {
+                    font-weight: 500;
+                    color: #1e293b;
+                    cursor: pointer;
+                }
+                .modal-footer {
+                    padding: 14px 24px 20px;
+                    border-top: 1px solid #f1f5f9;
                     display: flex;
                     justify-content: flex-end;
                     gap: 10px;
-                    margin-top: 20px;
                 }
                 button {
-                    padding: 10px 16px;
+                    padding: 9px 18px;
                     border-radius: 8px;
-                    border: none;
+                    font-size: 0.9rem;
                     font-weight: 600;
                     cursor: pointer;
+                    border: none;
                 }
                 .btn-cancelar {
-                    background: transparent;
-                    border: 1px solid #334155;
-                    color: #cbd5e1;
+                    background-color: #e2e8f0;
+                    color: #334155;
                 }
                 .btn-guardar {
-                    background: #3b82f6;
-                    color: white;
+                    background-color: #0b3558;
+                    color: #ffffff;
                 }
             </style>
 
-            <div class="overlay">
+            <div id="overlayFormulario" class="overlay">
                 <div class="modal">
-                    <h2>${editando ? "Editar Tarea Local" : "Nueva Tarea"}</h2>
+                    <div class="modal-header">
+                        <h2>${editando ? "Editar Tarea" : "Crear Nueva Tarea"}</h2>
+                    </div>
                     <form id="formTarea">
-                        <div class="campo">
-                            <label for="titulo">Título de la tarea</label>
-                            <input type="text" id="titulo" required value="${tituloActual}" placeholder="Ej: Diseñar componente...">
+                        <div class="modal-body">
+                            <div class="campo">
+                                <label for="inputTitulo">Título / Descripción de la tarea</label>
+                                <input type="text" id="inputTitulo" required value="${valorTitulo}" placeholder="Ej. Preparar entrega de proyecto...">
+                            </div>
+
+                            <div class="campo">
+                                <label for="inputFecha">Fecha de registro</label>
+                                <input type="date" id="inputFecha" required value="${valorFecha}">
+                            </div>
+
+                            <div class="check-row">
+                                <input type="checkbox" id="checkCompletada" ${valorCompletada ? "checked" : ""}>
+                                <label for="checkCompletada">Marcar tarea como completada</label>
+                            </div>
                         </div>
-                        <div class="campo">
-                            <label for="descripcion">Descripción</label>
-                            <textarea id="descripcion" placeholder="Detalles de la tarea...">${descActual}</textarea>
-                        </div>
-                        <div class="campo">
-                            <label for="prioridad">Prioridad</label>
-                            <select id="prioridad">
-                                <option value="baja" ${prioActual === "baja" ? "selected" : ""}>Baja</option>
-                                <option value="media" ${prioActual === "media" ? "selected" : ""}>Media</option>
-                                <option value="alta" ${prioActual === "alta" ? "selected" : ""}>Alta</option>
-                            </select>
-                        </div>
-                        <div class="acciones">
-                            <button type="button" class="btn-cancelar" id="btnCancelar">Cancelar</button>
-                            <button type="submit" class="btn-guardar">
-                                ${editando ? "Guardar Cambios" : "Crear Tarea"}
-                            </button>
+
+                        <div class="modal-footer">
+                            <button type="button" id="btnCancelar" class="btn-cancelar">Cancelar</button>
+                            <button type="submit" class="btn-guardar">Guardar</button>
                         </div>
                     </form>
                 </div>
             </div>
         `;
 
-        this.shadowRoot.getElementById("btnCancelar").addEventListener("click", () => this.cerrar());
+        this.shadowRoot.getElementById("btnCancelar").addEventListener("click", () => {
+            this.cerrar();
+        });
 
         this.shadowRoot.getElementById("formTarea").addEventListener("submit", (e) => {
             e.preventDefault();
-            const datos = {
-                id: editando ? this._tareaEdicion.id : null,
-                titulo: this.shadowRoot.getElementById("titulo").value,
-                descripcion: this.shadowRoot.getElementById("descripcion").value,
-                prioridad: this.shadowRoot.getElementById("prioridad").value
-            };
+
+            const titulo = this.shadowRoot.getElementById("inputTitulo").value.trim();
+            const fecha = this.shadowRoot.getElementById("inputFecha").value;
+            const completada = this.shadowRoot.getElementById("checkCompletada").checked;
 
             this.dispatchEvent(new CustomEvent("guardar-formulario", {
-                detail: datos,
+                detail: {
+                    id: editando ? this.tareaEnEdicion.id : null,
+                    titulo: titulo,
+                    fecha: fecha,
+                    completada: completada
+                },
                 bubbles: true,
                 composed: true
             }));
+
             this.cerrar();
         });
     }
