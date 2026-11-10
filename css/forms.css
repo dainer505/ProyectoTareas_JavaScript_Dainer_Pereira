@@ -1,0 +1,74 @@
+/* Estilos de buscador, filtros y botones de control */
+.input-buscador {
+    flex: 1;
+    min-width: 220px;
+    padding: 10px 14px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.input-buscador:focus {
+    border-color: #2563eb;
+}
+
+.botones-principales,
+.acciones-masivas,
+.grupo-filtros {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.btn {
+    padding: 10px 16px;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s, background-color 0.2s;
+}
+
+.btn:hover {
+    opacity: 0.92;
+}
+
+.btn-primario {
+    background-color: #2563eb;
+    color: #ffffff;
+}
+
+.btn-secundario {
+    background-color: #0f172a;
+    color: #ffffff;
+}
+
+.btn-exito {
+    background-color: #16a34a;
+    color: #ffffff;
+}
+
+.btn-peligro {
+    background-color: #dc2626;
+    color: #ffffff;
+}
+
+.btn-filtro {
+    padding: 8px 14px;
+    border: 1px solid #cbd5e1;
+    background-color: #f8fafc;
+    color: #334155;
+    border-radius: 6px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.btn-filtro.activo {
+    background-color: #2563eb;
+    color: #ffffff;
+    border-color: #2563eb;
+}

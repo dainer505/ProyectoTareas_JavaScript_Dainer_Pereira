@@ -1,0 +1,41 @@
+@media (max-width: 992px) {
+    .tasks-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .controls-card {
+        flex-wrap: wrap;
+    }
+
+    .search-box {
+        max-width: 100%;
+        width: 100%;
+    }
+}
+
+@media (max-width: 640px) {
+    .tasks-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .controls-card {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .filter-group {
+        width: 100%;
+    }
+
+    .filter-btn {
+        flex: 1;
+    }
+
+    .action-buttons {
+        flex-direction: column;
+    }
+
+    .bottom-bar {
+        flex-direction: column;
+    }
+}
