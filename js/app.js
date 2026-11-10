@@ -13,7 +13,7 @@ import {
 import "./componentes/tarjeta-tarea.js";
 import "./componentes/modal-formulario.js";
 
-// --- Parte de SEBASTIÁN: Importaciones de API y Modal Importar ---
+// --- Importaciones de API y Modal Importar ---
 import { obtenerTareasDesdeAPI } from "./datos/conexion-api.js";
 import "./componentes/modal-importar.js";
 
@@ -32,7 +32,7 @@ const modalImportar = document.getElementById("modalImportar");
 
 let filtroActual = "todos";
 
-// --- Parte de DAINER: Tareas iniciales de ejemplo (si LocalStorage está vacío la primera vez) ---
+// --- Tareas iniciales de ejemplo (si LocalStorage está vacío la primera vez) ---
 function cargarTareasInicialesSiEstaVacio() {
     const tareasGuardadas = obtenerTareas();
     if (tareasGuardadas.length === 0) {
@@ -45,7 +45,7 @@ function cargarTareasInicialesSiEstaVacio() {
     }
 }
 
-// --- Parte de DAINER: Renderizar Tarjetas en la Grilla ---
+// --- Renderizar Tarjetas en la Grilla ---
 function renderizarInterfaz() {
     const todasLasTareas = obtenerTareas();
     const textoBusqueda = inputBuscar.value.toLowerCase().trim();
@@ -81,7 +81,7 @@ function renderizarInterfaz() {
     });
 }
 
-// --- Parte de DAINER: Eventos de Tareas Locales y Barra Inferior ---
+// --- Eventos de Tareas Locales y Barra Inferior ---
 btnNuevaTarea.addEventListener("click", () => {
     modalFormulario.abrirParaCrear();
 });
@@ -120,7 +120,7 @@ btnVaciarLista.addEventListener("click", () => {
     renderizarInterfaz();
 });
 
-// --- Parte de SEBASTIÁN: Eventos de API, Buscador y Botones de Filtro ---
+// --- Eventos de API, Buscador y Botones de Filtro ---
 btnAbrirImportar.addEventListener("click", async () => {
     try {
         btnAbrirImportar.textContent = "Cargando API...";
@@ -149,6 +149,5 @@ botonesFiltro.forEach(boton => {
     });
 });
 
-// Inicializar aplicación con 3 tarjetas de muestra igual al wireframe
 cargarTareasInicialesSiEstaVacio();
 renderizarInterfaz();
