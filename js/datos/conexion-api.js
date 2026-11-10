@@ -1,15 +1,17 @@
-const URL_API_TODOS = 'https://jsonplaceholder.typicode.com/todos?_limit=15';
+const ENDPOINT_API = "https://jsonplaceholder.typicode.com/todos";
 
-export async function consultarTareasApi() {
+export async function obtenerTareasDesdeAPI() {
     try {
-        const respuesta = await fetch(URL_API_TODOS);
-        if (!respuesta.ok) {
-            throw new Error('No se pudo obtener respuesta del servidor');
+        const respuestaServidor = await fetch(${ENDPOINT_API}?_limit=8);
+
+        if (!respuestaServidor.ok) {
+            throw new Error(Error HTTP: ${respuestaServidor.status});
         }
-        const datos = await respuesta.json();
-        return datos;
-    } catch (error) {
-        console.error('Error al consultar JSONPlaceholder:', error);
-        throw error;
+
+        const registros = await respuestaServidor.json();
+        return registros;
+    } catch (err) {
+        console.error("Error al consultar la API:", err);
+        throw err;
     }
 }
