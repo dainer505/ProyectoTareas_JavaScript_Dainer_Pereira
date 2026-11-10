@@ -2,27 +2,50 @@ export class ModalImportar extends HTMLElement {
     constructor() {
         super();
         this.attachShadow({ mode: "open" });
+        this.listaTareasAPI = [];
     }
 
     connectedCallback() {
         this.render();
     }
 
-    abrir() {
-        this.shadowRoot.querySelector(".overlay").classList.add("activo");
+    mostrarTareasParaSeleccionar(tareasDesdeAPI) {
+        this.listaTareasAPI = tareasDesdeAPI;
+        this.render();
+        this.shadowRoot.getElementById("overlayImportar").classList.add("activo");
     }
 
     cerrar() {
-        this.shadowRoot.querySelector(".overlay").classList.remove("activo");
+        const overlay = this.shadowRoot.getElementById("overlayImportar");
+        if (overlay) overlay.classList.remove("activo");
     }
 
     render() {
+        let filasHTML = "";
+
+        this.listaTareasAPI.forEach((item, index) => {
+            const marcadoPorDefecto = index < 2 ? "checked" : "";
+            filasHTML += `
+                <label class="api-item">
+                    <input type="checkbox" class="check-api" value="${item.id}" ${marcadoPorDefecto}>
+                    <span>[API #${item.id}] ${item.title}</span>
+                </label>
+            `;
+        });
+
+        if (filasHTML === "") {
+            filasHTML = <p style="padding: 12px; color: #64748b;">Cargando tareas de la API...</p>;
+        }
+
         this.shadowRoot.innerHTML = `
             <style>
                 .overlay {
                     position: fixed;
-                    inset: 0;
-                    background: rgba(15, 23, 42, 0.75);
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background-color: rgba(30, 41, 59, 0.75);
                     display: none;
                     justify-content: center;
                     align-items: center;
@@ -33,74 +56,120 @@ export class ModalImportar extends HTMLElement {
                     display: flex;
                 }
                 .modal {
-                    background: #1e293b;
-                    border: 1px solid #334155;
+                    background-color: #ffffff;
                     border-radius: 12px;
                     width: 100%;
-                    max-width: 420px;
+                    max-width: 480px;
                     padding: 24px;
-                    color: #f8fafc;
+                    color: #1e293b;
+                    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25);
                 }
-                h2 { margin: 0 0 10px; font-size: 1.25rem; }
-                p { color: #94a3b8; font-size: 0.9rem; margin-bottom: 16px; line-height: 1.4; }
-                select {
-                    width: 100%;
-                    padding: 10px;
+                h2 {
+                    margin: 0 0 4px 0;
+                    font-size: 1.25rem;
+                    color: #0f172a;
+                }
+                .endpoint-text {
+                    margin: 0 0 16px 0;
+                    font-size: 0.82rem;
+                    color: #64748b;
+                }
+                .list-box {
+                    border: 1px solid #cbd5e1;
                     border-radius: 8px;
-                    border: 1px solid #334155;
-                    background: #0f172a;
-                    color: #f8fafc;
-                    margin-bottom: 20px;
+                    padding: 12px 16px;
+                    max-height: 250px;
+                    overflow-y: auto;
+                    background-color: #f8fafc;
                 }
-                .acciones {
+                .api-item {
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+                    padding: 10px 0;
+                    border-bottom: 1px solid #e2e8f0;
+                    font-size: 0.88rem;
+                    color: #1e293b;
+                    cursor: pointer;
+                }
+                .api-item:last-child {
+                    border-bottom: none;
+                }
+                .api-item input {
+                    width: 16px;
+                    height: 16px;
+                    accent-color: #2563eb;
+                    cursor: pointer;
+                }
+                .note {
+                    margin-top: 12px;
+                    font-size: 0.75rem;
+                    color: #64748b;
+                }
+                .modal-footer {
                     display: flex;
                     justify-content: flex-end;
                     gap: 10px;
+                    margin-top: 18px;
                 }
                 button {
-                    padding: 10px 16px;
+                    padding: 10px 18px;
                     border-radius: 8px;
-                    border: none;
+                    font-size: 0.9rem;
                     font-weight: 600;
                     cursor: pointer;
+                    border: none;
                 }
                 .btn-cancelar {
-                    background: transparent;
-                    border: 1px solid #334155;
-                    color: #cbd5e1;
+                    background-color: #e2e8f0;
+                    color: #334155;
                 }
                 .btn-importar {
-                    background: #8b5cf6;
-                    color: white;
+                    background-color: #2563eb;
+                    color: #ffffff;
                 }
             </style>
 
-            <div class="overlay">
+            <div id="overlayImportar" class="overlay">
                 <div class="modal">
-                    <h2>Importar desde JSONPlaceholder</h2>
-                    <p>Selecciona cuántas tareas remotas deseas descargar. Recuerda que las tareas de la API no podrán editar su texto.</p>
-                    <select id="selectCantidad">
-                        <option value="3">3 tareas de prueba</option>
-                        <option value="6" selected>6 tareas de prueba</option>
-                        <option value="10">10 tareas de prueba</option>
-                    </select>
-                    <div class="acciones">
-                        <button type="button" class="btn-cancelar" id="btnCerrar">Cancelar</button>
-                        <button type="button" class="btn-importar" id="btnConfirmar">Descargar Tareas</button>
+                    <h2>Importar Tareas (API)</h2>
+                    <p class="endpoint-text">Endpoint: https://jsonplaceholder.typicode.com/todos</p>
+
+                    <div class="list-box">
+                        ${filasHTML}
+                    </div>
+
+                    <p class="note">* Las tareas importadas recibirán ID propio (API-id-timestamp) y no podrán editarse.</p>
+
+                    <div class="modal-footer">
+                        <button type="button" id="btnCancelar" class="btn-cancelar">Cancelar</button>
+                        <button type="button" id="btnConfirmar" class="btn-importar">Importar Seleccionadas</button>
                     </div>
                 </div>
             </div>
         `;
 
-        this.shadowRoot.getElementById("btnCerrar").addEventListener("click", () => this.cerrar());
+        this.shadowRoot.getElementById("btnCancelar").addEventListener("click", () => {
+            this.cerrar();
+        });
 
         this.shadowRoot.getElementById("btnConfirmar").addEventListener("click", () => {
-            const limite = Number(this.shadowRoot.getElementById("selectCantidad").value);
+            const checksMarcados = this.shadowRoot.querySelectorAll(".check-api:checked");
+            const tareasElegidas = [];
+
+            checksMarcados.forEach(check => {
+                const tareaOriginal = this.listaTareasAPI.find(t => String(t.id) === String(check.value));
+                if (tareaOriginal) {
+                    tareasElegidas.push(tareaOriginal);
+                }
+            });
+
             this.dispatchEvent(new CustomEvent("confirmar-importacion", {
-                detail: { limite },
+                detail: { tareas: tareasElegidas },
                 bubbles: true,
                 composed: true
             }));
+
             this.cerrar();
         });
     }
