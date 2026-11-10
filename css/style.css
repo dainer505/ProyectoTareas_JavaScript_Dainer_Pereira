@@ -1,3 +1,71 @@
-@import url('./layout.css');
-@import url('./forms.css');
-@import url('./responsive.css');
+:root {
+    --primary-navy: #0b3558;
+    --primary-navy-hover: #144978;
+    --bg-body: #f1f5f9;
+    --bg-white: #ffffff;
+    --text-main: #1e293b;
+    --text-muted: #64748b;
+    --border-light: #e2e8f0;
+    --border-input: #cbd5e1;
+    --yellow-badge: #facc15;
+    --yellow-text: #422006;
+    --green-badge: #16a34a;
+    --danger-bg: #fee2e2;
+    --danger-border: #fecaca;
+    --danger-text: #dc2626;
+    --radius-card: 12px;
+    --radius-btn: 8px;
+    --shadow-soft: 0 2px 8px rgba(15, 23, 42, 0.05);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: var(--bg-body);
+    color: var(--text-main);
+    min-height: 100vh;
+}
+
+.btn {
+    padding: 10px 18px;
+    border-radius: var(--radius-btn);
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-dark {
+    background-color: var(--primary-navy);
+    color: #ffffff;
+    border: 1px solid var(--primary-navy);
+}
+
+.btn-dark:hover {
+    background-color: var(--primary-navy-hover);
+}
+
+.btn-outline {
+    background-color: #f8fafc;
+    color: var(--text-main);
+    border: 1px solid var(--border-input);
+}
+
+.btn-outline:hover {
+    background-color: #e2e8f0;
+}
+
+.btn-danger-soft {
+    background-color: var(--danger-bg);
+    color: var(--danger-text);
+    border: 1px solid var(--danger-border);
+}
+
+.btn-danger-soft:hover {
+    background-color: #fecaca;
+}
