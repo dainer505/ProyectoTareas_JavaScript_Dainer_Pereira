@@ -2,166 +2,171 @@ export class TarjetaTarea extends HTMLElement {
     constructor() {
         super();
         this.attachShadow({ mode: "open" });
-        this._tarea = null;
+        this.tarea = null;
     }
 
     set datosTarea(objetoTarea) {
-        this._tarea = objetoTarea;
+        this.tarea = objetoTarea;
         this.render();
     }
 
-    get datosTarea() {
-        return this._tarea;
+    formatearFechaBonita(fechaTexto) {
+        if (!fechaTexto) return "Sin fecha";
+        const meses = ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"];
+        const partes = fechaTexto.split("-");
+        if (partes.length === 3) {
+            const anio = partes[0];
+            const mesIndice = parseInt(partes[1], 10) - 1;
+            const dia = partes[2];
+            return `${dia} ${meses[mesIndice] || ""} ${anio}`;
+        }
+        return fechaTexto;
     }
 
     render() {
-        if (!this._tarea) return;
+        if (!this.tarea) return;
 
-        const { id, titulo, descripcion, prioridad, completada, origen, fechaCreacion } = this._tarea;
-        const esApi = origen === "api";
+        const esApi = this.tarea.origen === "api";
+        const textoEstado = this.tarea.completada ? "Completado" : "Pendiente";
+        const claseEstado = this.tarea.completada ? "badge-completado" : "badge-pendiente";
+        const fechaMostrada = this.formatearFechaBonita(this.tarea.fecha);
 
         this.shadowRoot.innerHTML = `
             <style>
-                :host {
-                    display: block;
-                }
                 .card {
-                    background-color: #1e293b;
-                    border: 1px solid ${completada ? "#10b981" : "#334155"};
-                    border-radius: 10px;
-                    padding: 18px;
+                    background-color: #ffffff;
+                    border: 1px solid #e2e8f0;
+                    border-radius: 12px;
+                    padding: 18px 20px;
+                    box-shadow: 0 2px 6px rgba(15, 23, 42, 0.04);
                     display: flex;
                     flex-direction: column;
                     justify-content: space-between;
-                    gap: 14px;
+                    gap: 18px;
                     height: 100%;
                     box-sizing: border-box;
-                    transition: transform 0.2s ease, box-shadow 0.2s ease;
-                    opacity: ${completada ? "0.8" : "1"};
                 }
-                .card:hover {
-                    transform: translateY(-3px);
-                    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+                .top-row {
+                    display: flex;
+                    align-items: flex-start;
+                    gap: 10px;
                 }
-                .badges {
+                input[type="checkbox"] {
+                    width: 17px;
+                    height: 17px;
+                    margin-top: 3px;
+                    cursor: pointer;
+                    accent-color: #0b3558;
+                }
+                .info {
+                    flex: 1;
+                }
+                .titulo {
+                    margin: 0;
+                    font-size: 1rem;
+                    font-weight: 600;
+                    color: #1e293b;
+                    text-decoration: ${this.tarea.completada ? "line-through" : "none"};
+                }
+                .fecha {
+                    margin: 4px 0 0 0;
+                    font-size: 0.82rem;
+                    color: #64748b;
+                }
+                .bottom-row {
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
-                    gap: 8px;
                 }
                 .badge {
-                    font-size: 0.72rem;
-                    font-weight: 700;
-                    padding: 4px 8px;
-                    border-radius: 6px;
-                    text-transform: uppercase;
+                    padding: 5px 14px;
+                    border-radius: 999px;
+                    font-size: 0.8rem;
+                    font-weight: 600;
                 }
-                .origen-local { background: rgba(59, 130, 246, 0.2); color: #60a5fa; }
-                .origen-api { background: rgba(168, 85, 247, 0.2); color: #c084fc; }
-                .prio-alta { background: rgba(239, 68, 68, 0.2); color: #f87171; }
-                .prio-media { background: rgba(245, 158, 11, 0.2); color: #fbbf24; }
-                .prio-baja { background: rgba(16, 185, 129, 0.2); color: #34d399; }
-
-                .titulo {
-                    margin: 0;
-                    font-size: 1.1rem;
-                    color: #f8fafc;
-                    text-decoration: ${completada ? "line-through" : "none"};
+                .badge-pendiente {
+                    background-color: #facc15;
+                    color: #422006;
                 }
-                .descripcion {
-                    margin: 6px 0 0;
-                    font-size: 0.9rem;
-                    color: #94a3b8;
-                    line-height: 1.4;
+                .badge-completado {
+                    background-color: #16a34a;
+                    color: #ffffff;
                 }
-                .meta {
-                    font-size: 0.78rem;
-                    color: #64748b;
-                }
-                .actions {
+                .icon-actions {
                     display: flex;
                     gap: 8px;
-                    padding-top: 10px;
-                    border-top: 1px solid #334155;
                 }
-                button {
-                    flex: 1;
-                    padding: 8px 10px;
+                .icon-btn {
+                    width: 32px;
+                    height: 32px;
                     border-radius: 6px;
-                    border: 1px solid #334155;
-                    background: #0f172a;
-                    color: #f8fafc;
-                    font-size: 0.82rem;
-                    font-weight: 600;
+                    border: 1px solid #cbd5e1;
+                    background-color: #f8fafc;
                     cursor: pointer;
-                    transition: background 0.2s;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 0.85rem;
                 }
-                button:hover:not(:disabled) {
-                    background: #334155;
+                .icon-btn:hover:not(:disabled) {
+                    background-color: #e2e8f0;
                 }
-                .btn-toggle {
-                    border-color: ${completada ? "#f59e0b" : "#10b981"};
-                    color: ${completada ? "#fbbf24" : "#34d399"};
+                .icon-btn:disabled {
+                    opacity: 0.4;
+                    cursor: not-allowed;
                 }
                 .btn-delete {
-                    border-color: #ef4444;
-                    color: #f87171;
-                }
-                button:disabled {
-                    opacity: 0.45;
-                    cursor: not-allowed;
+                    color: #dc2626;
                 }
             </style>
 
-            <article class="card">
-                <div>
-                    <div class="badges">
-                        <span class="badge ${esApi ? "origen-api" : "origen-local"}">
-                            ${esApi ? "API Externa" : "Local"}
-                        </span>
-                        <span class="badge prio-${prioridad}">
-                            Prioridad ${prioridad}
-                        </span>
+            <div class="card">
+                <div class="top-row">
+                    <input type="checkbox" id="checkEstado" ${this.tarea.completada ? "checked" : ""}>
+                    <div class="info">
+                        <h3 class="titulo">${this.tarea.titulo}</h3>
+                        <p class="fecha">${fechaMostrada}</p>
                     </div>
-                    <h3 class="titulo" style="margin-top: 12px;">${titulo}</h3>
-                    <p class="descripcion">${descripcion || "Sin descripción adicional."}</p>
                 </div>
 
-                <div>
-                    <div class="meta">Registro: ${fechaCreacion}</div>
-                    <div class="actions" style="margin-top: 10px;">
-                        <button class="btn-toggle" id="btnEstado">
-                            ${completada ? "Reabrir" : "Completar"}
+                <div class="bottom-row">
+                    <span class="badge ${claseEstado}">${textoEstado}</span>
+                    <div class="icon-actions">
+                        <button type="button" id="btnEditar" class="icon-btn" ${esApi ? "disabled title='Tarea de API no editable'" : "title='Editar tarea'"}>
+                            ✏️
                         </button>
-                        <button id="btnEditar" ${esApi ? "disabled title='No editable (Origen API)'" : ""}>
-                            ${esApi ? "Bloqueada" : "Editar"}
+                        <button type="button" id="btnEliminar" class="icon-btn btn-delete" title="Eliminar tarea">
+                            🗑️
                         </button>
-                        <button class="btn-delete" id="btnEliminar">Eliminar</button>
                     </div>
                 </div>
-            </article>
+            </div>
         `;
 
-        this.shadowRoot.getElementById("btnEstado").addEventListener("click", () => {
+        const checkEstado = this.shadowRoot.getElementById("checkEstado");
+        const btnEditar = this.shadowRoot.getElementById("btnEditar");
+        const btnEliminar = this.shadowRoot.getElementById("btnEliminar");
+
+        checkEstado.addEventListener("change", () => {
             this.dispatchEvent(new CustomEvent("cambiar-estado", {
-                detail: { id },
+                detail: { id: this.tarea.id },
                 bubbles: true,
                 composed: true
             }));
         });
 
-        this.shadowRoot.getElementById("btnEditar").addEventListener("click", () => {
+        btnEditar.addEventListener("click", () => {
             if (esApi) return;
             this.dispatchEvent(new CustomEvent("editar-tarea", {
-                detail: { tarea: this._tarea },
+                detail: { tarea: this.tarea },
                 bubbles: true,
                 composed: true
             }));
         });
 
-        this.shadowRoot.getElementById("btnEliminar").addEventListener("click", () => {
+        btnEliminar.addEventListener("click", () => {
             this.dispatchEvent(new CustomEvent("eliminar-tarea", {
-                detail: { id },
+                detail: { id: this.tarea.id },
                 bubbles: true,
                 composed: true
             }));
