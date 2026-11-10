@@ -39,7 +39,7 @@ Aquí comparamos el diseño que planeamos al inicio (Wireframes) contra cómo no
 ![Wireframe Principal](./wireframes/wireframe%201.png)
 
 **2. Cómo nos quedó implementado:**
-![Implementación Principal](./wireframes/implementacion%201.png)
+![Implementación Principal](./wireframes/Implementacion1.png)
 
 ### Vista 2: Ventanas Modales (Crear Tarea e Importar de API)
 
@@ -48,11 +48,11 @@ Aquí comparamos el diseño que planeamos al inicio (Wireframes) contra cómo no
 
 **2. Cómo nos quedó implementado:**
 **Crear nueva tarea**
-![Crear nueva tarea](./wireframes/implementacion%203.png)
+![Crear nueva tarea](./wireframes/Implementacion3.png)
 
 
 **Importar Tareas (API)**
-![Importar tareas](./wireframes/implementacion%202.png)
+![Importar tareas](./wireframes/Implementacion2.png)
 
 **Importar Tareas (API)**
 ## 🧪 Resumen de Pruebas Realizadas
