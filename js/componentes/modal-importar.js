@@ -34,7 +34,7 @@ export class ModalImportar extends HTMLElement {
         });
 
         if (filasHTML === "") {
-            filasHTML = <p style="padding: 12px; color: #64748b;">Cargando tareas de la API...</p>;
+            filasHTML = `<p style="padding: 12px; color: #64748b;">Cargando tareas de la API...</p>`;
         }
 
         this.shadowRoot.innerHTML = `
